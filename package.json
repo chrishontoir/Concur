@@ -3,5 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "chrishontoir <chrishontoir@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^26.4.2"
+  }
 }

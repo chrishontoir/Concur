@@ -1,6 +1,6 @@
-const Concur = require('../../src/concur');
+// const Concur = require('../../src/concur');
 
-// Validate
+// // Validate
 const concur = new Concur();
 
 const schema = concur.schema({
@@ -18,7 +18,7 @@ const validate = schema.validate({
 console.log(validate)
 
 
-// Validate a number
+// // Validate a number
 const concurNumber = new Concur();
 
 const schemaNumber = concurNumber.schema(concurNumber.number().min(5).iterable().required());
@@ -28,8 +28,7 @@ const validateNumber = schemaNumber.validate();
 console.log(validateNumber)
 
 
-// Validate an object
-
+// // Validate an object
 const concurObject = new Concur();
 
 const schemaObject = concurObject.schema({
