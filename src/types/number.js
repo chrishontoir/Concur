@@ -16,11 +16,12 @@ class ConcurNumber {
     }
 
     generateError = {
-        invalid: (property) => {
+        invalid: (property, validOptions) => {
             const key = this.key ? this.key : '';
             const index = this._index !== undefined ? `[${this._index}]` : '';
             const separator = this.key ? ': ' : ' ';
-            this.errors.push(`${key}${index}${separator}INVALID ${property.toUpperCase()}`);
+            const valid = validOptions ? `(${validOptions})` : '';
+            this.errors.push(`${key}${index}${separator}INVALID ${property.toUpperCase()}${valid}`);
         },
         required: () => this.errors.push(`${this.key}: REQUIRED`)
     }
@@ -89,9 +90,9 @@ class ConcurNumber {
     }
 
     checkType (value) {
-        if (typeof value !== this.type) {
+        if (this.checkValid() && typeof value !== this.type) {
             this.setInvalid();
-            this.generateError.invalid(`TYPE(${this.type})`);
+            this.generateError.invalid('TYPE', this.type);
         }
     }
 
@@ -99,7 +100,7 @@ class ConcurNumber {
         if (this._min === undefined) return;
         if (this.checkValid() && value < this._min) {
             this.setInvalid();
-            this.generateError.invalid(`MIN(${this._min})`);
+            this.generateError.invalid('MIN', this._min);
         }
     }
 
@@ -107,7 +108,7 @@ class ConcurNumber {
         if (this._max === undefined) return;
         if (this.checkValid() && value > this._max) {
             this.setInvalid();
-            this.generateError.invalid(`MAX(${this._max})`);
+            this.generateError.invalid('MAX', this._max);
         }
     }
 
@@ -119,7 +120,7 @@ class ConcurNumber {
             value.toString().split('.')[1].length > this._decimals
         ) {
             this.setInvalid();
-            this.generateError.invalid(`DECIMALS(${this._decimals})`);
+            this.generateError.invalid('DECIMALS', this._decimals);
         }
     }
 
@@ -127,7 +128,7 @@ class ConcurNumber {
         if (this._multipleOf === undefined) return;
         if (this.checkValid() && value % this._multipleOf !== 0) {
             this.setInvalid();
-            this.generateError.invalid(`MULTIPLE_OF(${this._multipleOf})`);
+            this.generateError.invalid('MULTIPLE_OF', this._multipleOf);
         }
     }
 
@@ -135,7 +136,7 @@ class ConcurNumber {
         if (this._options === undefined) return;
         if (this.checkValid() && !this._options.includes(value)) {
             this.setInvalid();
-            this.generateError.invalid(`OPTIONS(${this._options})`);
+            this.generateError.invalid('OPTIONS', this._options);
         }
     }
 
@@ -146,8 +147,7 @@ class ConcurNumber {
             this.checkRequired();
         } else {
             if (this._iterable && Array.isArray(this.value)) {
-                this.status = Array(this.value.length).fill('VALID')
-                console.log(this.status)
+                this.status = Array(this.value.length).fill('VALID');
                 this.value.forEach((value, index) => {
                     this._index = index;
                     this.checkType(value);
@@ -157,8 +157,6 @@ class ConcurNumber {
                     this.checkMultipleOf(value);
                     this.checkOptions(value);
                 });
-
-                console.log(this.status, this.errors)
 
                 if (this.status.includes('INVALID')) {
                     this.setInvalid(true);
