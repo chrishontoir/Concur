@@ -1,4 +1,5 @@
 const ConcurNumber = require('./types/number');
+const ConcurObject = require('./types/object');
 
 class Concur {
     constructor () {
@@ -7,6 +8,7 @@ class Concur {
         this._schema = undefined;
         this.response = undefined;
         this.number = () => new ConcurNumber()
+        this.object = object => new ConcurObject(object)
     }
 
     schema (schema) {
