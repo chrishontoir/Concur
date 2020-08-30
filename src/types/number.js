@@ -7,8 +7,8 @@ class ConcurNumber {
         this.type = 'number';
         this.errors = [];
         this.array = false;
-        this.minValue = undefined;
-        this.maxValue = undefined;
+        this._min = undefined;
+        this._max = undefined;
     }
 
     generateError = {
@@ -34,12 +34,12 @@ class ConcurNumber {
     }
 
     min (value) {
-        this.minValue = value;
+        this._min = value;
         return this;
     }
 
     max (value) {
-        this.maxValue = value;
+        this._max = value;
         return this;
     }
 
@@ -66,12 +66,12 @@ class ConcurNumber {
 
     checkMin (value, index) {
         if (index !== undefined) {
-            if (this.status[index] === 'VALID' && value < this.minValue) {
+            if (this.status[index] === 'VALID' && value < this._min) {
                 this.status.splice(index, 1, 'INVALID');
                 this.generateError.invalid('MIN', index);
             }
         } else {
-            if (this.status === 'VALID' && value < this.minValue) {
+            if (this.status === 'VALID' && value < this._min) {
                 this.status = 'INVALID';
                 this.generateError.invalid('MIN');
             }
@@ -80,12 +80,12 @@ class ConcurNumber {
 
     checkMax (value, index) {
         if (index !== undefined) {
-            if (this.status[index] === 'VALID' && value > this.maxValue) {
+            if (this.status[index] === 'VALID' && value > this._max) {
                 this.status.splice(index, 1, 'INVALID');
                 this.generateError.invalid('MAX', index);
             }
         } else {
-            if (this.status === 'VALID' && value > this.maxValue) {
+            if (this.status === 'VALID' && value > this._max) {
                 this.status = 'INVALID';
                 this.generateError.invalid('MAX');
             }
