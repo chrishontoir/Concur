@@ -1,4 +1,4 @@
-// const Concur = require('../../src/concur');
+const Concur = require('../../src/concur');
 
 // // Validate
 const concur = new Concur();
