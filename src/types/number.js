@@ -12,7 +12,9 @@ class ConcurNumber {
     }
 
     generateError = {
-        invalid: (property, index) => index !== undefined ? this.errors.push(`${this.key}[${index}]: INVALID ${property}`) : this.errors.push(`${this.key}: INVALID ${property}`),
+        invalid: (property, index) => index !== undefined
+            ? this.errors.push(`${this.key ? `${this.key}[${index}]: ` : `[${index}] `}INVALID ${property}`)
+            : this.errors.push(`${this.key ? `${this.key}: ` : ''}INVALID ${property}`),
         required: () => this.errors.push(`${this.key}: REQUIRED`)
     }
 
@@ -21,13 +23,13 @@ class ConcurNumber {
         return this;
     }
 
-    required () {
-        this._required = true;
+    multiple () {
+        this.array = true;
         return this;
     }
 
-    multiple () {
-        this.array = true;
+    required () {
+        this._required = true;
         return this;
     }
 
@@ -36,41 +38,9 @@ class ConcurNumber {
         return this;
     }
 
-    checkMin () {
-        if (this.array && Array.isArray(this.value)) {
-            this.value.forEach((value, index) => {
-                if (value < this.minValue) {
-                    this.status = 'INVALID';
-                    this.generateError.invalid('MIN', index);
-                }
-            })
-        } else {
-            if (this.value < this.minValue) {
-                this.status = 'INVALID';
-                this.generateError.invalid('MIN');
-            }
-        }
-    }
-
     max (value) {
         this.maxValue = value;
         return this;
-    }
-
-    checkMax () {
-        if (this.array && Array.isArray(this.value)) {
-            this.value.forEach((value, index) => {
-                if (value > this.maxValue) {
-                    this.status = 'INVALID';
-                    this.generateError.invalid('MAX', index);
-                }
-            })
-        } else {
-            if (this.value > this.maxValue) {
-                this.status = 'INVALID';
-                this.generateError.invalid('MAX');
-            }
-        }
     }
 
     checkRequired () {
@@ -80,30 +50,71 @@ class ConcurNumber {
         }
     }
 
-    checkType () {
-        if (this.array && Array.isArray(this.value)) {
-            this.value.forEach((value, index) => {
-                if (typeof value !== this.type) {
-                    this.status = 'INVALID';
-                    this.generateError.invalid('TYPE', index);
-                }
-            })
+    checkType (value, index) {
+        if (index !== undefined) {
+            if (typeof value !== this.type) {
+                this.status.splice(index, 1, 'INVALID');
+                this.generateError.invalid('TYPE', index);
+            }
         } else {
-            if (typeof this.value !== this.type) {
+            if (typeof value !== this.type) {
                 this.status = 'INVALID';
                 this.generateError.invalid('TYPE');
             }
         }
     }
 
+    checkMin (value, index) {
+        if (index !== undefined) {
+            if (this.status[index] === 'VALID' && value < this.minValue) {
+                this.status.splice(index, 1, 'INVALID');
+                this.generateError.invalid('MIN', index);
+            }
+        } else {
+            if (this.status === 'VALID' && value < this.minValue) {
+                this.status = 'INVALID';
+                this.generateError.invalid('MIN');
+            }
+        }
+    }
+
+    checkMax (value, index) {
+        if (index !== undefined) {
+            if (this.status[index] === 'VALID' && value > this.maxValue) {
+                this.status.splice(index, 1, 'INVALID');
+                this.generateError.invalid('MAX', index);
+            }
+        } else {
+            if (this.status === 'VALID' && value > this.maxValue) {
+                this.status = 'INVALID';
+                this.generateError.invalid('MAX');
+            }
+        }
+    }
+
     validate (value) {
         this.setValue(value);
-        if (this.value !== undefined) {
-            this.checkType();
-            this.checkMin();
-            this.checkMax();
-        } else {
+
+        if (this.value === undefined) {
             this.checkRequired();
+        } else {
+            if (this.array && Array.isArray(this.value)) {
+                this.status = Array(this.value.length).fill('VALID')
+                this.value.forEach((value, index) => {
+                    this.checkType(value, index);
+                    this.checkMin(value, index);
+                    this.checkMax(value, index);
+                });
+
+                if (this.status.includes('INVALID')) {
+                    this.status = 'INVALID';
+                } else {
+                    this.status = 'VALID';
+                }
+            } else {
+                this.checkType(this.value);
+                this.checkMin(this.value);
+            }
         }
         return this;
     }

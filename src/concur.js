@@ -14,7 +14,30 @@ class Concur {
         return this;
     }
 
-    validate(object) {
+    validate(value) {
+        if (this._schema instanceof ConcurNumber) {
+            this.validateNumber(value);
+        } else {
+            this.validateObject(value);
+        }
+
+        if (this.errors.length) {
+            this.response = { status: this.status, reason: this.errors };
+        } else {
+            this.response = { status: this.status };
+        }
+        return this.response;
+    }
+
+    validateNumber(number) {
+        this._schema.validate(number);
+        if (this._schema.status === 'INVALID') {
+            this.status = 'INVALID';
+            this.errors.push(...this._schema.errors);
+        }
+    }
+
+    validateObject(object) {
         Object.entries(this._schema).forEach(entry => {
             const [schemaKey, schemaObject] = entry;
             schemaObject.key = schemaKey;
@@ -30,13 +53,6 @@ class Concur {
             this.status = 'INVALID';
             this.errors.push(`${key}: UNKNOWN`);
         })
-
-        if (this.errors.length) {
-            this.response = { status: this.status, reason: this.errors };
-        } else {
-            this.response = { status: this.status };
-        }
-        return this.response;
     }
 }
 
