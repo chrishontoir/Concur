@@ -73,10 +73,10 @@ class ConcurNumber extends ConcurBase {
 
     parseNumber () {
         if (this._parse) {
-            if (this._decimals === undefined) {
-                this.value = parseInt(this.value);
+            if (this._iterable && Array.isArray(this.value)) {
+                this.value = this.value.map(value => parseFloat(value))
             } else {
-                this.value = parseFloat(this.value);
+                this.value = parseFloat(this.value)
             }
         }
     }

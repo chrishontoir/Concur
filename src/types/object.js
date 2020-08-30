@@ -35,6 +35,11 @@ class ConcurObject {
         }
     }
 
+    parse() {
+        this._parse = true;
+        return this;
+    }
+
     checkRequired() {
         if (this._required) {
             this.status = 'INVALID';

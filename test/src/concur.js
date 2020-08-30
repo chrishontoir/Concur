@@ -19,33 +19,35 @@ const Concur = require('../../src/concur');
 
 
 // // Validate a number
-const concurNumber = new Concur();
+// const concurNumber = new Concur();
 
-const schemaNumber = concurNumber.schema(concurNumber.number().min(5).iterable().required()).querystring();
+// const schemaNumber = concurNumber.schema(concurNumber.number().min(5).iterable().required()).querystring();
 
-const validateNumber = schemaNumber.validate('1');
+// const validateNumber = schemaNumber.validate(['1', '2', '3']);
 
-console.log(validateNumber)
+// console.log(validateNumber)
 
 
 // // Validate an object
-// const concurObject = new Concur();
+const concurObject = new Concur();
 
-// const schemaObject = concurObject.schema({
-//     fruits: concurObject.object({
-//         apple: concurObject.number().max(99).iterable().required(),
-//         banana: concurObject.object({
-//             cocoa: concurObject.number().required()
-//         })
-//     })
-// })
+const schemaObject = concurObject.schema({
+    fruits: concurObject.object({
+        apple: concurObject.number().max(99).iterable().required(),
+        banana: concurObject.object({
+            cocoa: concurObject.number().required()
+        })
+    })
+}).querystring()
 
-// const validateObject = schemaObject.validate({
-//     fruits: {
-//         apple: [100, 1],
-//         banana: {},
-//         dill: 1
-//     }
-// })
+const validateObject = schemaObject.validate({
+    fruits: {
+        apple: ['100', '1'],
+        banana: {
+            cocoa: '2'
+        },
+        dill: '1'
+    }
+})
 
-// console.log(validateObject)
+console.log(validateObject)
