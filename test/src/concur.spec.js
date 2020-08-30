@@ -21,9 +21,9 @@ console.log(validate)
 // Validate a number
 const concurNumber = new Concur();
 
-const schemaNumber = concurNumber.schema(concurNumber.number().min(5).iterable());
+const schemaNumber = concurNumber.schema(concurNumber.number().min(5).iterable().required());
 
-const validateNumber = schemaNumber.validate(['a', 7, 2]);
+const validateNumber = schemaNumber.validate();
 
 console.log(validateNumber)
 

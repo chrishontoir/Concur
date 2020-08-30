@@ -1,6 +1,9 @@
+const VALID = 'VALID';
+const INVALID = 'INVALID';
+
 class ConcurNumber {
     constructor () {
-        this.status = 'VALID';
+        this.status = VALID;
         this.key = undefined;
         this.value = undefined;
         this.type = 'number';
@@ -19,26 +22,31 @@ class ConcurNumber {
         invalid: (property, validOptions) => {
             const key = this.key ? this.key : '';
             const index = this._index !== undefined ? `[${this._index}]` : '';
-            const separator = this.key ? ': ' : ' ';
+            const separator = this.key ? ':' : '';
+            const space = this._index !== undefined ? ' ' : '';
             const valid = validOptions ? `(${validOptions})` : '';
-            this.errors.push(`${key}${index}${separator}INVALID ${property.toUpperCase()}${valid}`);
+            this.errors.push(`${key}${index}${separator}${space}${INVALID} ${property.toUpperCase()}${valid}`);
         },
-        required: () => this.errors.push(`${this.key}: REQUIRED`)
+        required: () => {
+            const key = this.key ? this.key : '';
+            const separator = this.key ? ': ' : '';
+            this.errors.push(`${key}${separator}REQUIRED`)
+        }
     }
 
     setInvalid (ignoreArray = false) {
         if (this._index !== undefined && ignoreArray === false) {
-            this.status.splice(this._index, 1, 'INVALID');
+            this.status.splice(this._index, 1, INVALID);
         } else {
-            this.status = 'INVALID';
+            this.status = INVALID;
         }
     }
 
     checkValid () {
         if (this._index !== undefined) {
-            return this.status[this._index] === 'VALID';
+            return this.status[this._index] === VALID;
         } else {
-            return this.status === 'VALID';
+            return this.status === VALID;
         }
     }
 
@@ -114,11 +122,7 @@ class ConcurNumber {
 
     checkDecimals (value) {
         if (this._decimals === undefined) return;
-        if (
-            this.checkValid() &&
-            value.toString().split('.')[1] &&
-            value.toString().split('.')[1].length > this._decimals
-        ) {
+        if (this.checkValid() && value.toString()?.split('.')?.[1]?.length > this._decimals) {
             this.setInvalid();
             this.generateError.invalid('DECIMALS', this._decimals);
         }
@@ -147,7 +151,7 @@ class ConcurNumber {
             this.checkRequired();
         } else {
             if (this._iterable && Array.isArray(this.value)) {
-                this.status = Array(this.value.length).fill('VALID');
+                this.status = Array(this.value.length).fill(VALID);
                 this.value.forEach((value, index) => {
                     this._index = index;
                     this.checkType(value);
@@ -158,10 +162,10 @@ class ConcurNumber {
                     this.checkOptions(value);
                 });
 
-                if (this.status.includes('INVALID')) {
+                if (this.status.includes(INVALID)) {
                     this.setInvalid(true);
                 } else {
-                    this.status = 'VALID';
+                    this.status = VALID;
                 }
             } else {
                 this.checkType(this.value);

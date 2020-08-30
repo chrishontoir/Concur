@@ -12,15 +12,27 @@ class Concur {
     }
 
     schema (schema) {
-        this._schema = schema;
+        if (arguments.length > 1) {
+            this.status = 'INVALID';
+            this.errors.push('schema() only accepts one argument');
+        } else {
+            this._schema = schema;
+        }
         return this;
     }
 
     validate(value) {
-        if (this._schema instanceof ConcurNumber) {
-            this.validateNumber(value);
-        } else {
-            this.validateObject(value);
+        if (arguments.length > 1) {
+            this.status = 'INVALID';
+            this.errors.push('validate() only accepts one argument');
+        }
+
+        if (this.status === 'VALID') {
+            if (this._schema instanceof ConcurNumber) {
+                this.validateNumber(value);
+            } else {
+                this.validateObject(value);
+            }
         }
 
         if (this.errors.length) {
