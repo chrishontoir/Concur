@@ -8,6 +8,7 @@ class ConcurObject {
         this.type = 'object';
         this.errors = [];
         this.value = undefined;
+        this._parse = false;
     }
 
     generateError = {
@@ -60,6 +61,7 @@ class ConcurObject {
             Object.entries(this.properties).forEach(property => {
                 const [propertyKey, propertyValue] = property;
                 propertyValue.key = `${this.key}.${propertyKey}`;
+                if (this._parse) propertyValue.parse();
                 propertyValue.validate(value[propertyKey])
                 if (propertyValue.status === 'INVALID') {
                     this.status = 'INVALID';

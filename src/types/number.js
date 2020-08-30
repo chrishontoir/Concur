@@ -11,6 +11,7 @@ class ConcurNumber extends ConcurBase {
         this._max = undefined;
         this._decimals = undefined;
         this._multipleOf = undefined;
+        this._parse = false;
     }
 
     min (value) {
@@ -30,6 +31,11 @@ class ConcurNumber extends ConcurBase {
 
     multipleOf(value) {
         this._multipleOf = value;
+        return this;
+    }
+
+    parse() {
+        this._parse = true;
         return this;
     }
 
@@ -65,8 +71,19 @@ class ConcurNumber extends ConcurBase {
         }
     }
 
+    parseNumber () {
+        if (this._parse) {
+            if (this._decimals === undefined) {
+                this.value = parseInt(this.value);
+            } else {
+                this.value = parseFloat(this.value);
+            }
+        }
+    }
+
     validate (value) {
         this.setValue(value);
+        this.parseNumber();
 
         if (this.value === undefined) {
             this.checkRequired();

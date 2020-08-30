@@ -7,6 +7,7 @@ class Concur {
         this.errors = [];
         this._schema = undefined;
         this.response = undefined;
+        this._parse = false;
         this.number = () => new ConcurNumber()
         this.object = object => new ConcurObject(object)
     }
@@ -18,6 +19,11 @@ class Concur {
         } else {
             this._schema = schema;
         }
+        return this;
+    }
+
+    querystring () {
+        this._parse = true;
         return this;
     }
 
@@ -44,6 +50,7 @@ class Concur {
     }
 
     validateNumber(number) {
+        if (this._parse) this._schema.parse();
         this._schema.validate(number);
         if (this._schema.status === 'INVALID') {
             this.status = 'INVALID';
@@ -55,6 +62,7 @@ class Concur {
         Object.entries(this._schema).forEach(entry => {
             const [schemaKey, schemaObject] = entry;
             schemaObject.key = schemaKey;
+            if (this._parse) schemaObject.parse();
             schemaObject.validate(object[schemaKey])
             if (schemaObject.status === 'INVALID') {
                 this.status = 'INVALID';
