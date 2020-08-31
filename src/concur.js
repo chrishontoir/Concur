@@ -1,5 +1,6 @@
 const ConcurNumber = require('./types/number');
 const ConcurObject = require('./types/object');
+const ConcurBoolean = require('./types/boolean');
 
 class Concur {
     constructor () {
@@ -10,6 +11,7 @@ class Concur {
         this._parse = false;
         this.number = () => new ConcurNumber()
         this.object = object => new ConcurObject(object)
+        this.boolean = () => new ConcurBoolean()
     }
 
     schema (schema) {
@@ -36,6 +38,8 @@ class Concur {
         if (this.status === 'VALID') {
             if (this._schema instanceof ConcurNumber) {
                 this.validateNumber(value);
+            } else if (this._schema instanceof ConcurBoolean) {
+                this.validateBoolean(value);
             } else {
                 this.validateObject(value);
             }
@@ -52,6 +56,15 @@ class Concur {
     validateNumber(number) {
         if (this._parse) this._schema.parse();
         this._schema.validate(number);
+        if (this._schema.status === 'INVALID') {
+            this.status = 'INVALID';
+            this.errors.push(...this._schema.errors);
+        }
+    }
+
+    validateBoolean(boolean) {
+        if (this._parse) this._schema.parse();
+        this._schema.validate(boolean);
         if (this._schema.status === 'INVALID') {
             this.status = 'INVALID';
             this.errors.push(...this._schema.errors);

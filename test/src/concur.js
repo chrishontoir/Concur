@@ -29,25 +29,34 @@ const Concur = require('../../src/concur');
 
 
 // // Validate an object
-const concurObject = new Concur();
+// const concurObject = new Concur();
 
-const schemaObject = concurObject.schema({
-    fruits: concurObject.object({
-        apple: concurObject.number().max(99).iterable().required(),
-        banana: concurObject.object({
-            cocoa: concurObject.number().required()
-        })
-    })
-}).querystring()
+// const schemaObject = concurObject.schema({
+//     fruits: concurObject.object({
+//         apple: concurObject.number().max(99).iterable().required(),
+//         banana: concurObject.object({
+//             cocoa: concurObject.number().required()
+//         })
+//     })
+// }).querystring()
 
-const validateObject = schemaObject.validate({
-    fruits: {
-        apple: ['100', '1'],
-        banana: {
-            cocoa: '2'
-        },
-        dill: '1'
-    }
-})
+// const validateObject = schemaObject.validate({
+//     fruits: {
+//         apple: ['100', '1'],
+//         banana: {
+//             cocoa: '2'
+//         },
+//         dill: '1'
+//     }
+// })
 
-console.log(validateObject)
+// console.log(validateObject)
+
+// Validate boolean
+const concurBoolean = new Concur();
+
+const schemaBoolean = concurBoolean.schema(concurBoolean.boolean().iterable()).querystring()
+
+const validateBoolean = schemaBoolean.validate();
+
+console.log(validateBoolean);

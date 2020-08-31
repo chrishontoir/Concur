@@ -11,6 +11,7 @@ class ConcurBase {
         this._iterable = false;
         this._index = undefined;
         this._options = undefined;
+        this._parse = false;
     }
 
     generateError = {
@@ -62,6 +63,11 @@ class ConcurBase {
 
     options(values) {
         this._options = values;
+        return this;
+    }
+
+    parse() {
+        this._parse = true;
         return this;
     }
 
