@@ -18,7 +18,12 @@ class Concur {
         if (arguments.length > 1) {
             this.status = 'INVALID';
             this.errors.push('schema() only accepts one argument');
-        } else {
+        }
+        if (arguments.length === 0) {
+            this.status = 'INVALID';
+            this.errors.push('schema() requires an argument');
+        }
+        if (this.status === 'VALID') {
             this._schema = schema;
         }
         return this;
@@ -34,7 +39,10 @@ class Concur {
             this.status = 'INVALID';
             this.errors.push('validate() only accepts one argument');
         }
-
+        if (arguments.length === 0) {
+            this.status = 'INVALID';
+            this.errors.push('validate() requires an argument');
+        }
         if (this.status === 'VALID') {
             if (this._schema instanceof ConcurNumber) {
                 this.validateNumber(value);

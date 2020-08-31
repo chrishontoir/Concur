@@ -40,16 +40,16 @@ class ConcurBoolean extends ConcurBase {
             this.checkRequired();
         } else {
             if (this._iterable && Array.isArray(this.value)) {
-                this.status = Array(this.value.length).fill(VALID);
+                this.status = Array(this.value.length).fill('VALID');
                 this.value.forEach((value, index) => {
                     this._index = index;
                     this.checkType(value);
                 });
 
-                if (this.status.includes(INVALID)) {
+                if (this.status.includes('INVALID')) {
                     this.setInvalid(true);
                 } else {
-                    this.status = VALID;
+                    this.setValid(true)
                 }
             } else {
                 this.checkType(this.value);

@@ -19,13 +19,13 @@ const Concur = require('../../src/concur');
 
 
 // // Validate a number
-// const concurNumber = new Concur();
+const concurNumber = new Concur();
 
-// const schemaNumber = concurNumber.schema(concurNumber.number().min(5).iterable().required()).querystring();
+const schemaNumber = concurNumber.schema(concurNumber.number().min(5).iterable().required()).querystring();
 
-// const validateNumber = schemaNumber.validate(['1', '2', '3']);
+const validateNumber = schemaNumber.validate(['1', '2', '3']);
 
-// console.log(validateNumber)
+console.log(validateNumber)
 
 
 // // Validate an object
@@ -53,10 +53,10 @@ const Concur = require('../../src/concur');
 // console.log(validateObject)
 
 // Validate boolean
-const concurBoolean = new Concur();
+// const concurBoolean = new Concur();
 
-const schemaBoolean = concurBoolean.schema(concurBoolean.boolean().iterable()).querystring()
+// const schemaBoolean = concurBoolean.schema(concurBoolean.boolean());
 
-const validateBoolean = schemaBoolean.validate();
+// const validateBoolean = schemaBoolean.validate([false, true, 'true']);
 
-console.log(validateBoolean);
+// console.log(validateBoolean);

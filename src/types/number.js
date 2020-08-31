@@ -23,12 +23,12 @@ class ConcurNumber extends ConcurBase {
         return this;
     }
 
-    decimals(precision) {
+    decimals (precision) {
         this._decimals = precision;
         return this;
     }
 
-    multipleOf(value) {
+    multipleOf (value) {
         this._multipleOf = value;
         return this;
     }
@@ -97,7 +97,7 @@ class ConcurNumber extends ConcurBase {
                 if (this.status.includes(INVALID)) {
                     this.setInvalid(true);
                 } else {
-                    this.status = VALID;
+                    this.setValid(true);
                 }
             } else {
                 this.checkType(this.value);

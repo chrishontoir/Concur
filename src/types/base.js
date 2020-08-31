@@ -38,6 +38,14 @@ class ConcurBase {
         }
     }
 
+    setValid (ignoreArray = false) {
+        if (this._index !== undefined && ignoreArray === false) {
+            this.status.splice(this._index, 1, VALID);
+        } else {
+            this.status = VALID;
+        }
+    }
+
     checkValid () {
         if (this._index !== undefined) {
             return this.status[this._index] === VALID;
@@ -61,12 +69,12 @@ class ConcurBase {
         return this;
     }
 
-    options(values) {
+    options (values) {
         this._options = values;
         return this;
     }
 
-    parse() {
+    parse () {
         this._parse = true;
         return this;
     }
