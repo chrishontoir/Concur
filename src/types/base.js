@@ -1,5 +1,4 @@
-const VALID = 'VALID';
-const INVALID = 'INVALID';
+const { VALID, INVALID } = require('../constants');
 
 class ConcurBase {
     constructor () {
@@ -27,7 +26,8 @@ class ConcurBase {
             const key = this.key ? this.key : '';
             const separator = this.key ? ': ' : '';
             this.errors.push(`${key}${separator}REQUIRED`)
-        }
+        },
+        requiredProperties: () => this.errors.push(`${this.key}: REQUIRED PROPERTIES(${this._requiredProperties})`)
     }
 
     setInvalid (ignoreArray = false) {
@@ -99,6 +99,36 @@ class ConcurBase {
             this.setInvalid();
             this.generateError.invalid('OPTIONS', this._options);
         }
+    }
+
+    validate (value) {
+        this.setValue(value);
+        this.parseForType();
+
+        if (this.value === undefined) {
+            this.checkRequired();
+        } else {
+            if (this._iterable && Array.isArray(this.value)) {
+                this.status = Array(this.value.length).fill(VALID);
+                this.value.forEach((value, index) => {
+                    this._index = index;
+                    this.checkType(value);
+                    this.checkOptions(value);
+                    this.validateForType(value);
+                });
+
+                if (this.status.includes(INVALID)) {
+                    this.setInvalid(true);
+                } else {
+                    this.setValid(true);
+                }
+            } else {
+                this.checkType(this.value);
+                this.checkOptions(this.value);
+                this.validateForType(this.value);
+            }
+        }
+        return this;
     }
 }
 

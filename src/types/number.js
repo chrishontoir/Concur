@@ -1,6 +1,3 @@
-const VALID = 'VALID';
-const INVALID = 'INVALID';
-
 const ConcurBase = require('./base');
 
 class ConcurNumber extends ConcurBase {
@@ -65,7 +62,7 @@ class ConcurNumber extends ConcurBase {
         }
     }
 
-    parseNumber () {
+    parseForType () {
         if (this._parse) {
             if (this._iterable && Array.isArray(this.value)) {
                 this.value = this.value.map(value => parseFloat(value))
@@ -75,39 +72,11 @@ class ConcurNumber extends ConcurBase {
         }
     }
 
-    validate (value) {
-        this.setValue(value);
-        this.parseNumber();
-
-        if (this.value === undefined) {
-            this.checkRequired();
-        } else {
-            if (this._iterable && Array.isArray(this.value)) {
-                this.status = Array(this.value.length).fill(VALID);
-                this.value.forEach((value, index) => {
-                    this._index = index;
-                    this.checkType(value);
-                    this.checkMin(value);
-                    this.checkMax(value);
-                    this.checkDecimals(value);
-                    this.checkMultipleOf(value);
-                    this.checkOptions(value);
-                });
-
-                if (this.status.includes(INVALID)) {
-                    this.setInvalid(true);
-                } else {
-                    this.setValid(true);
-                }
-            } else {
-                this.checkType(this.value);
-                this.checkMin(this.value);
-                this.checkMax(this.value);
-                this.checkDecimals(this.value);
-                this.checkMultipleOf(this.value);
-                this.checkOptions(this.value);
-            }
-        }
+    validateForType (value) {
+        this.checkMin(value)
+        this.checkMax(value)
+        this.checkDecimals(value)
+        this.checkMultipleOf(value)
         return this;
     }
 }

@@ -1,6 +1,4 @@
-const ConcurNumber = require('./types/number');
-const ConcurObject = require('./types/object');
-const ConcurBoolean = require('./types/boolean');
+const { ConcurBoolean, ConcurNumber, ConcurObject } = require('./types');
 
 class Concur {
     constructor () {
