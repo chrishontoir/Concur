@@ -5,7 +5,8 @@
   "author": "chrishontoir <chrishontoir@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "coverage": "jest --coverage"
   },
   "devDependencies": {
     "jest": "^26.4.2"
