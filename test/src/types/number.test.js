@@ -128,3 +128,56 @@ describe('checkRequired()', () => {
         })
     })
 })
+
+describe('checkMin()', () => {
+    describe('&& this._min === undefined', () => {
+        beforeEach(() => {
+            this.number.checkMin();
+        })
+        test('should keep this.status as VALID', () => {
+            expect(this.number.status).toStrictEqual('VALID');
+        })
+        test('should not add an error to this.errors', () => {
+            expect(this.number.errors).toStrictEqual([]);
+        })
+    })
+
+    describe('&& this._min === 2 && this.value === 3', () => {
+        beforeEach(() => {
+            this.number.min(2)
+            this.number.checkMin(3);
+        })
+        test('should keep this.status as VALID', () => {
+            expect(this.number.status).toStrictEqual('VALID');
+        })
+        test('should not add an error to this.errors', () => {
+            expect(this.number.errors).toStrictEqual([]);
+        })
+    })
+
+    describe('&& this._min === 2 && this.value === 2', () => {
+        beforeEach(() => {
+            this.number.min(2)
+            this.number.checkMin(2);
+        })
+        test('should keep this.status as VALID', () => {
+            expect(this.number.status).toStrictEqual('VALID');
+        })
+        test('should not add an error to this.errors', () => {
+            expect(this.number.errors).toStrictEqual([]);
+        })
+    })
+
+    describe('&& this._min === 2 && this.value === 1', () => {
+        beforeEach(() => {
+            this.number.min(2)
+            this.number.checkMin(1);
+        })
+        test('should set this.status to INVALID', () => {
+            expect(this.number.status).toStrictEqual('INVALID');
+        })
+        test('should add an error to this.errors', () => {
+            expect(this.number.errors).toStrictEqual(["INVALID MIN(2)"]);
+        })
+    })
+})
