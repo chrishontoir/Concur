@@ -1,24 +1,37 @@
 const Concur = require('../../src/concur');
 
-// // Validate
+// Validate
 const concur = new Concur();
 
 const schema = concur.schema({
     apple: concur.number().iterable().options([10, 11]),
     banana: concur.number().decimals(2).multipleOf(4).iterable().required(),
-    digestives: concur.number().required()
-})
+    digestives: concur.number().required(),
+    animals: concur.array({
+        haribo: concur.number().required()
+    })
+});
 
 const validate = schema.validate({
     apple: [10, 10],
     banana: [4, 7, 12, 23],
-    chocolate: 'hi'
+    chocolate: 'hi',
+    animals: [
+        {
+            haribo: '1',
+            test: 'test'
+        },
+        {
+            haribo: 1,
+            test: 'hey'
+        }
+    ]
 })
 
 console.log(validate)
 
 
-// // Validate a number
+// Validate a number
 const concurNumber = new Concur();
 
 const schemaNumber = concurNumber.schema(concurNumber.number().min(5).iterable().required()).querystring();
@@ -28,7 +41,7 @@ const validateNumber = schemaNumber.validate(['1', '2', '3']);
 console.log(validateNumber)
 
 
-// // Validate an object
+// Validate an object
 const start = new Date();
 const concurObject = new Concur();
 
@@ -64,3 +77,13 @@ const schemaBoolean = concurBoolean.schema(concurBoolean.boolean().iterable()).q
 const validateBoolean = schemaBoolean.validate([false, 'false', true]);
 
 console.log(validateBoolean);
+
+
+// Validate string
+const concurString = new Concur();
+
+const schemaString = concurString.schema(concurString.string().iterable()).querystring();
+
+const validateString = schemaString.validate(['hi', 'bye']);
+
+console.log(validateString);

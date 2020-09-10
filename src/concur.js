@@ -1,4 +1,4 @@
-const { ConcurBoolean, ConcurNumber, ConcurObject } = require('./types');
+const { ConcurArray, ConcurBoolean, ConcurNumber, ConcurObject, ConcurString } = require('./types');
 
 class Concur {
     constructor () {
@@ -7,9 +7,11 @@ class Concur {
         this._schema = undefined;
         this.response = undefined;
         this._parse = false;
+        this.array = object => new ConcurArray(new ConcurObject(object));
         this.number = () => new ConcurNumber()
         this.object = object => new ConcurObject(object)
         this.boolean = () => new ConcurBoolean()
+        this.string = () => new ConcurString()
     }
 
     schema (schema) {
@@ -32,7 +34,7 @@ class Concur {
         return this;
     }
 
-    validate(value) {
+    validate (value) {
         if (arguments.length > 1) {
             this.status = 'INVALID';
             this.errors.push('validate() only accepts one argument');
@@ -46,6 +48,8 @@ class Concur {
                 this.validateNumber(value);
             } else if (this._schema instanceof ConcurBoolean) {
                 this.validateBoolean(value);
+            } else if (this._schema instanceof ConcurString) {
+                this.validateString(value);
             } else {
                 this.validateObject(value);
             }
@@ -59,7 +63,7 @@ class Concur {
         return this.response;
     }
 
-    validateNumber(number) {
+    validateNumber (number) {
         if (this._parse) this._schema.parse();
         this._schema.validate(number);
         if (this._schema.status === 'INVALID') {
@@ -68,7 +72,7 @@ class Concur {
         }
     }
 
-    validateBoolean(boolean) {
+    validateBoolean (boolean) {
         if (this._parse) this._schema.parse();
         this._schema.validate(boolean);
         if (this._schema.status === 'INVALID') {
@@ -77,7 +81,16 @@ class Concur {
         }
     }
 
-    validateObject(object) {
+    validateString (string) {
+        if (this._parse) this._schema.parse();
+        this._schema.validate(string);
+        if (this._schema.status === 'INVALID') {
+            this.status = 'INVALID';
+            this.errors.push(...this._schema.errors);
+        }
+    }
+
+    validateObject (object) {
         Object.entries(this._schema).forEach(entry => {
             const [schemaKey, schemaObject] = entry;
             schemaObject.key = schemaKey;

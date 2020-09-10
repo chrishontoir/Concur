@@ -38,6 +38,13 @@ class ConcurNumber extends ConcurBase {
         }
     }
 
+    checkType (value) {
+        if (this.checkValid() && (typeof value !== this.type || isNaN(value))) {
+            this.setInvalid();
+            this.generateError.invalid('TYPE', this.type);
+        }
+    }
+
     checkMax (value) {
         if (this._max === undefined) return;
         if (this.checkValid() && value > this._max) {

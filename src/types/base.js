@@ -46,6 +46,13 @@ class ConcurBase {
         }
     }
 
+    reset () {
+        this.status = VALID;
+        this.key = undefined;
+        this.value = undefined;
+        this.errors = [];
+    }
+
     checkValid () {
         if (this._index !== undefined) {
             return this.status[this._index] === VALID;
@@ -103,18 +110,18 @@ class ConcurBase {
 
     validate (value) {
         this.setValue(value);
-        this.parseForType();
 
         if (this.value === undefined) {
             this.checkRequired();
         } else {
+            if (this.parseForType) this.parseForType();
             if (this._iterable && Array.isArray(this.value)) {
                 this.status = Array(this.value.length).fill(VALID);
                 this.value.forEach((value, index) => {
                     this._index = index;
                     this.checkType(value);
                     this.checkOptions(value);
-                    this.validateForType(value);
+                    if (this.validateForType) this.validateForType(value);
                 });
 
                 if (this.status.includes(INVALID)) {
@@ -125,7 +132,7 @@ class ConcurBase {
             } else {
                 this.checkType(this.value);
                 this.checkOptions(this.value);
-                this.validateForType(this.value);
+                if (this.validateForType) this.validateForType(this.value);
             }
         }
         return this;

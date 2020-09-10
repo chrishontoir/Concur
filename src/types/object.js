@@ -39,8 +39,9 @@ class ConcurObject extends ConcurBase {
             if (this.status === 'INVALID') return;
             Object.entries(this.properties).forEach(property => {
                 const [propertyKey, propertyValue] = property;
-                propertyValue.key = `${this.key}.${propertyKey}`;
+                propertyValue.reset();
                 if (this._parse) propertyValue.parse();
+                propertyValue.key = `${this.key}.${propertyKey}`;
                 propertyValue.validate(value[propertyKey])
                 if (propertyValue.status === 'INVALID') {
                     this.setInvalid();
@@ -51,7 +52,7 @@ class ConcurObject extends ConcurBase {
     
             Object.keys(value).forEach(key => {
                 this.setInvalid();
-                this.errors.push(`${key}: UNKNOWN`);
+                this.errors.push(`${this.key}.${key}: UNKNOWN`);
             })
         }
     }
