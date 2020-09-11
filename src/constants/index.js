@@ -1,4 +1,6 @@
 module.exports = {
     VALID: 'VALID',
-    INVALID: 'INVALID'
+    INVALID: 'INVALID',
+    ERROR: 'ERROR',
+    REQUIRED: 'REQUIRED'
 }

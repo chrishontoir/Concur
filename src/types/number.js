@@ -8,26 +8,65 @@ class ConcurNumber extends ConcurBase {
         this._max = undefined;
         this._decimals = undefined;
         this._multipleOf = undefined;
+        this._odd = false;
+        this._even = false;
     }
 
     min (value) {
-        this._min = value;
+        if (typeof value !== 'number') {
+            this.setInvalid();
+            this.generateError.schemaError('MIN', 'argument needs to be a number')
+        } else {
+            this._min = value;
+        }
         return this;
     }
 
     max (value) {
-        this._max = value;
+        if (typeof value !== 'number') {
+            this.setInvalid();
+            this.generateError.schemaError('MAX', 'argument needs to be a number')
+        } else {
+            this._max = value;
+        }
         return this;
     }
 
     decimals (precision) {
-        this._decimals = precision;
+        if (typeof precision !== 'number') {
+            this.setInvalid();
+            this.generateError.schemaError('DECIMALS', 'argument needs to be a number')
+        } else {
+            this._decimals = precision;
+        }
         return this;
     }
 
     multipleOf (value) {
-        this._multipleOf = value;
+        if (typeof value !== 'number') {
+            this.setInvalid();
+            this.generateError.schemaError('MULTIPLE_OF', 'argument needs to be a number')
+        } else {
+            this._multipleOf = value;
+        }
         return this;
+    }
+
+    odd () {
+        this._odd = true;
+        return this;
+    }
+
+    even () {
+        this._even = true;
+        return this;
+    }
+
+    checkType (value) {
+        if (this.checkValid() && (typeof value !== this.type || isNaN(value))) {
+            this.setInvalid();
+            this.generateError.invalid('TYPE', this.type);
+        }
     }
 
     checkMin (value) {
@@ -35,13 +74,6 @@ class ConcurNumber extends ConcurBase {
         if (this.checkValid() && value < this._min) {
             this.setInvalid();
             this.generateError.invalid('MIN', this._min);
-        }
-    }
-
-    checkType (value) {
-        if (this.checkValid() && (typeof value !== this.type || isNaN(value))) {
-            this.setInvalid();
-            this.generateError.invalid('TYPE', this.type);
         }
     }
 
@@ -69,6 +101,22 @@ class ConcurNumber extends ConcurBase {
         }
     }
 
+    checkOdd (value) {
+        if (this._odd === false) return;
+        if (this.checkValid() && value % 2 !== 1) {
+            this.setInvalid();
+            this.generateError.invalid('ODD')
+        }
+    }
+
+    checkEven (value) {
+        if (this._even === false) return;
+        if (this.checkValid() && value % 2 !== 0) {
+            this.setInvalid();
+            this.generateError.invalid('EVEN')
+        }
+    }
+
     parseForType () {
         if (this._parse) {
             if (this._iterable && Array.isArray(this.value)) {
@@ -80,10 +128,12 @@ class ConcurNumber extends ConcurBase {
     }
 
     validateForType (value) {
-        this.checkMin(value)
-        this.checkMax(value)
-        this.checkDecimals(value)
-        this.checkMultipleOf(value)
+        this.checkMin(value);
+        this.checkMax(value);
+        this.checkDecimals(value);
+        this.checkMultipleOf(value);
+        this.checkOdd(value);
+        this.checkEven(value);
         return this;
     }
 }

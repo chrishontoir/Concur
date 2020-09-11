@@ -1,4 +1,4 @@
-const { VALID, INVALID } = require('../constants');
+const { VALID, INVALID, ERROR, REQUIRED } = require('../constants');
 
 class ConcurBase {
     constructor () {
@@ -13,21 +13,27 @@ class ConcurBase {
         this._parse = false;
     }
 
+    createErrorMessage () {
+        const key = this.key ? this.key : '';
+        const index = this._index !== undefined ? `[${this._index}]` : '';
+        const identifier = `${key}${index}`;
+        const separator = identifier ? ':' : '';
+        const message =  [identifier, separator, ...Object.values(arguments)].filter(Boolean).join(' ');
+        this.errors.push(message);
+    }
+
     generateError = {
         invalid: (property, validOptions) => {
-            const key = this.key ? this.key : '';
-            const index = this._index !== undefined ? `[${this._index}]` : '';
-            const separator = this.key ? ':' : '';
-            const space = this._index !== undefined ? ' ' : '';
-            const valid = validOptions ? `(${validOptions})` : '';
-            this.errors.push(`${key}${index}${separator}${space}${INVALID} ${property.toUpperCase()}${valid}`);
+            const valid = validOptions !== undefined ? `(${validOptions})` : '';
+            this.createErrorMessage(INVALID, property.toUpperCase(), valid)
+        },
+        schemaError: (functionName, message) => {
+            this.createErrorMessage(ERROR, `${functionName}()`, message)
         },
         required: () => {
-            const key = this.key ? this.key : '';
-            const separator = this.key ? ': ' : '';
-            this.errors.push(`${key}${separator}REQUIRED`)
+            this.createErrorMessage(REQUIRED)
         },
-        requiredProperties: () => this.errors.push(`${this.key}: REQUIRED PROPERTIES(${this._requiredProperties})`)
+        requiredProperties: () => this.createErrorMessage('REQUIRED PROPERTIES', `(${this._requiredProperties})`)
     }
 
     setInvalid (ignoreArray = false) {

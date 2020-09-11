@@ -142,6 +142,19 @@ describe('checkMin()', () => {
         })
     })
 
+    // describe('&& this._min === false', () => {
+    //     beforeEach(() => {
+    //         this.number.min(false)
+    //         this.number.checkMin();
+    //     })
+    //     test('should keep this.status as INVALID', () => {
+    //         expect(this.number.status).toStrictEqual('INVALID');
+    //     })
+    //     test('should not add an error to this.errors', () => {
+    //         expect(this.number.errors).toStrictEqual(['Min needs to be a number']);
+    //     })
+    // })
+
     describe('&& this._min === 2 && this.value === 3', () => {
         beforeEach(() => {
             this.number.min(2)
