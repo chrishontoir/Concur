@@ -37,7 +37,7 @@ concur.validate({
 ```
 
 ```
-{ status: 'VALID' }
+concur.status = 'VALID'
 ```
 ---
 ### **Invalid**
@@ -60,14 +60,12 @@ concur.validate({
 ```
 
 ```
-{ 
-    status: 'INVALID',
-    reason: [
+concur.status = 'INVALID'
+concur.reason = [
         'banana: INVALID MIN(2)',
         'vehicles.bus: REQUIRED',
         'vehicles.van: UNKNOWN'
-    ]
-}
+]
 ```
 ---
 ---
