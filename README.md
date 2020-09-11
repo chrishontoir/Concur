@@ -5,7 +5,8 @@ A JavaScript validator
 ```
 $ npm install @chrishontoir/concur
 ```
-
+---
+---
 ## **Use**
 ```
 const concur = new Concur();
@@ -68,3 +69,33 @@ concur.validate({
     ]
 }
 ```
+---
+---
+## **Types**
+
+### **General**
+- `.required()`
+- `.iterable()`
+- `.options()`
+
+### **Array**
+
+### **Boolean**
+- `.true()`
+- `.false()`
+
+### **Date**
+
+### **Number**
+- `.min()`
+- `.max()`
+- `.decimals()`
+- `.multipleOf()`
+- `.odd()`
+- `.even()`
+
+### **Object**
+
+### **String**
+- `.min()`
+- `.max()`
