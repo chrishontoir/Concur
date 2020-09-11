@@ -1,17 +1,17 @@
-# concur
+# **concur**
 A JavaScript validator
 
-## Install
+## **Install**
 ```
 $ npm install @chrishontoir/concur
 ```
 
-## Use
+## **Use**
 ```
 const concur = new Concur();
 ```
 ---
-
+### **Valid**
 ```
 concur.schema({
     apple: concur.number().max(5).required()
@@ -26,6 +26,7 @@ concur.validate({
 { status: 'VALID' }
 ```
 ---
+### **Invalid**
 ```
 concur.schema({
     banana: concur.number().min(2).required()
