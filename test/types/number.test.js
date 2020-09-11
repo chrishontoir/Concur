@@ -1,4 +1,4 @@
-const ConcurNumber = require('../../../src/types/number');
+const ConcurNumber = require('../../src/types/number');
 
 beforeEach(() => {
     this.number = new ConcurNumber();
