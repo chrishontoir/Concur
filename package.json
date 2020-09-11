@@ -1,5 +1,5 @@
 {
-  "name": "concur",
+  "name": "@chrishontoir/concur",
   "version": "1.0.0",
   "main": "index.js",
   "author": "chrishontoir <chrishontoir@gmail.com>",

@@ -1,7 +1,7 @@
-# Concur
+# concur
 A JavaScript validator
 
 ## Install
 ```
-$ npm install concur
+$ npm install @chrishontoir/concur
 ```
