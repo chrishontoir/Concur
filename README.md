@@ -79,12 +79,14 @@ concur.validate({
 - `.options()`
 
 ### **Array**
+No specific functions.
 
 ### **Boolean**
 - `.true()`
 - `.false()`
 
 ### **Date**
+WIP...
 
 ### **Number**
 - `.min()`
@@ -95,6 +97,7 @@ concur.validate({
 - `.even()`
 
 ### **Object**
+No specific functions.
 
 ### **String**
 - `.min()`
