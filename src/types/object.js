@@ -6,6 +6,7 @@ class ConcurObject extends ConcurBase {
         this.type = 'object';
         this.properties = value;
         this._requiredProperties = [];
+        this._lastIndex = true;
         this.required();
     }
 
@@ -41,6 +42,7 @@ class ConcurObject extends ConcurBase {
                 const [propertyKey, propertyValue] = property;
                 propertyValue.reset();
                 if (this._parse) propertyValue.parse();
+                propertyValue._lastIndex = this._lastIndex;
                 propertyValue.key = `${this.key}.${propertyKey}`;
                 propertyValue.validate(value[propertyKey])
                 if (propertyValue.status === 'INVALID') {

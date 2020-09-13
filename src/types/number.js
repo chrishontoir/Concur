@@ -4,12 +4,21 @@ class ConcurNumber extends ConcurBase {
     constructor () {
         super();
         this.type = 'number';
+        this._total = 0;
         this._min = undefined;
         this._max = undefined;
         this._decimals = undefined;
         this._multipleOf = undefined;
+        this._sum = undefined;
         this._odd = false;
         this._even = false;
+        this._lastIndex = true;
+    }
+
+    setValue (value) {
+        this.value = value;
+        this._total += value;
+        return this;
     }
 
     min (value) {
@@ -59,6 +68,11 @@ class ConcurNumber extends ConcurBase {
 
     even () {
         this._even = true;
+        return this;
+    }
+
+    sum (value) {
+        this._sum = value;
         return this;
     }
 
@@ -117,6 +131,14 @@ class ConcurNumber extends ConcurBase {
         }
     }
 
+    checkSum () {
+        if (this._sum === undefined) return;
+        if (this.checkValid() && this._total !== this._sum) {
+            this.setInvalid();
+            this.generateError.invalid('SUM', this._sum)
+        }
+    }
+
     parseForType () {
         if (this._parse) {
             if (this._iterable && Array.isArray(this.value)) {
@@ -134,6 +156,10 @@ class ConcurNumber extends ConcurBase {
         this.checkMultipleOf(value);
         this.checkOdd(value);
         this.checkEven(value);
+
+        if (this._lastIndex) {
+            this.checkSum();
+        }
         return this;
     }
 }

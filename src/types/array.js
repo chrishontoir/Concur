@@ -6,6 +6,7 @@ class ConcurArray extends ConcurBase {
         this.type = 'array';
         this.properties = value;
         this._requiredProperties = [];
+        this._lastIndex = false;
         this.required();
     }
 
@@ -39,8 +40,10 @@ class ConcurArray extends ConcurBase {
             this.checkType(this.value);
             if (this.status === 'INVALID') return;
             this.value.forEach((value, index) => {
+                if (index + 1 === this.value.length) this._lastIndex = true;
                 this.properties.reset();
                 if (this._parse) this.properties.parse();
+                this.properties._lastIndex = this._lastIndex;
                 this.properties.key = `${this.key}[${index}]`
                 this.properties.validate(value)
                 if (this.properties.status === 'INVALID') {
