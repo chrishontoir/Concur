@@ -93,6 +93,7 @@ WIP...
 - `.multipleOf()`
 - `.odd()`
 - `.even()`
+- `.sum()`
 
 ### **Object**
 No specific functions.
