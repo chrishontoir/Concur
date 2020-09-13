@@ -77,7 +77,10 @@ concur.reason = [
 - `.options()`
 
 ### **Array**
-No specific functions.
+A new array must be given an object as its argument. If you need to validate an array of non object values then create it as the type you want to validate and call .iterable()
+
+[1, 2, 3]
+`concur.number().iterable()`
 
 ### **Boolean**
 - `.true()`
